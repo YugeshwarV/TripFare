@@ -125,15 +125,6 @@ final_fare = base_fare + extra + mta_tax + tip + tolls + improvement_surcharge
 | Tip              | 2.0             |
 | Tolls            | 0.0             |
 | Surcharge        | 0.3             |
-
----
-
-## 📚 Resources
-
-- [NYC Taxi Dataset on Kaggle](https://www.kaggle.com/c/nyc-taxi-fare-prediction)
-- [Scikit-learn Documentation](https://scikit-learn.org/stable/)
-- [Streamlit Documentation](https://docs.streamlit.io/)
-
 ---
 
 ## 👨‍💻 Author
