@@ -20,11 +20,11 @@ A machine learning web app that predicts the total fare for NYC taxi rides based
 
 ## 🧠 Model Overview
 
-- Model: `LinearRegression`
+- Model: `RandomForestRegressor`
 - Features used:
-  - Numeric: `VendorID`, `passenger_count`, lat/lon coordinates, trip duration, hour, weekday
-  - Engineered: `trip_duration_min`, `trip_distance_km`
-  - One-hot encoded: `RatecodeID_*`, `payment_type_*`
+  - 'trip_distance_km', 'trip_duration_min', 'tip_amount', 'fare_amount',
+    'passenger_count', 'hour', 'day_of_week', 'RatecodeID', 'payment_type',
+    'VendorID', 'store_and_fwd_flag'
 - Target variable: `fare_amount`
 - Preprocessing: `StandardScaler` for normalization
 
@@ -62,7 +62,6 @@ scikit-learn==1.5.1
 Ensure the following trained model files are in the project root:
 
 - `model.pkl`
-- `scaler.pkl`
 - `expected_columns.pkl`
 
 > If not present, you can regenerate using the training notebook or script provided.
@@ -86,7 +85,6 @@ Visit `http://localhost:8501` in your browser.
 ├── TripFareNB.ipynb             # Jupyter notebook used to train the model
 ├── Tripfare_app.py              # Streamlit app
 ├── model.pkl                    # Trained LinearRegression model
-├── scaler.pkl                   # Fitted StandardScaler
 ├── expected_columns.pkl         # List of model's expected input columns
 ├── README.md                    # Project documentation
 ```
@@ -105,26 +103,6 @@ Visit `http://localhost:8501` in your browser.
 final_fare = base_fare + extra + mta_tax + tip + tolls + improvement_surcharge
 ```
 
----
-
-## 📊 Example Input
-
-| Field            | Example         |
-|------------------|-----------------|
-| Pickup Date      | 2025-06-14      |
-| Pickup Time      | 09:00 AM        |
-| Dropoff Time     | 09:30 AM        |
-| VendorID         | 2               |
-| Passenger Count  | 1               |
-| Pickup Lat/Lon   | 40.748817 / -73.985428 |
-| Dropoff Lat/Lon  | 40.751652 / -73.977295 |
-| Ratecode ID      | 1               |
-| Payment Type     | 2               |
-| Extra            | 0.5             |
-| MTA Tax          | 0.5             |
-| Tip              | 2.0             |
-| Tolls            | 0.0             |
-| Surcharge        | 0.3             |
 ---
 
 ## 👨‍💻 Author
