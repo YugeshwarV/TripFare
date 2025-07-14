@@ -1,111 +1,127 @@
+# TripFare: NYC Taxi Fare Prediction App
 
-# 🚖 NYC Taxi Fare Prediction App
-
-A machine learning web app that predicts the total fare for NYC taxi rides based on trip details such as pickup/dropoff locations, timestamps, and passenger count. Built using **Streamlit**, **scikit-learn**, and a trained **Linear Regression model**.
-
----
-
-## 📦 Features
-
-- Predicts **total fare** using a regression model trained on NYC taxi data.
-- User-friendly **Streamlit interface**.
-- Accepts detailed trip inputs like:
-  - Pickup & Dropoff datetime
-  - Passenger count
-  - Coordinates
-  - Extra charges, tax, tips, etc.
-- Final prediction includes **base fare + surcharges**.
+A Streamlit-powered machine learning web app that predicts the total taxi fare in NYC based on trip details like distance, time, tip, tolls, and more.
 
 ---
 
-## 🧠 Model Overview
+## Problem Statement
 
-- Model: `RandomForestRegressor`
-- Features used:
-  - 'trip_distance_km', 'trip_duration_min', 'tip_amount', 'fare_amount',
-    'passenger_count', 'hour', 'day_of_week', 'RatecodeID', 'payment_type',
-    'VendorID', 'store_and_fwd_flag'
-- Target variable: `fare_amount`
-- Preprocessing: `StandardScaler` for normalization
+As part of an urban mobility analytics project, the goal is to predict the **total fare amount** for NYC taxi trips using historical ride data. This helps riders estimate costs, supports driver incentives, and enables pricing transparency.
 
 ---
 
-## 🛠️ Setup Instructions
+## Project Highlights
 
-### ✅ 1. Clone the Repository
+- Predicts **`total_amount`** (target)
+- Includes surcharges like `tip_amount`, `mta_tax`, `tolls_amount`, `improvement_surcharge`
+- Regression modeling using **Gradient Boosting**
+- Clean Streamlit UI for real-time prediction
 
+---
+
+## Dataset Description
+
+The model was trained on real NYC Yellow Taxi data with the following features:
+
+| Feature                 | Description                                 |
+|------------------------|---------------------------------------------|
+| `trip_distance_km`     | Distance between pickup and dropoff (in km) |
+| `trip_duration_min`    | Duration of the trip (in minutes)           |
+| `fare_per_km`          | Fare per km                                 |
+| `fare_per_min`         | Fare per minute                             |
+| `hour`                 | Hour of the pickup                          |
+| `RatecodeID`           | Fare type code (standard, JFK, etc.)        |
+| `passenger_count`      | Number of passengers                        |
+| `VendorID`             | Vendor/Taxi operator ID                     |
+
+---
+
+## Model Overview
+
+- Algorithm: **GradientBoostingRegressor**
+- Trained on: 80% of cleaned dataset
+- Tuned using: `RandomizedSearchCV`
+- Final model accuracy: **R² ~ 0.895**
+
+---
+
+## Files Included
+
+| File Name             | Purpose                                 |
+|-----------------------|------------------------------------------|
+| `TripFareApp.py`      | Streamlit app for predicting fare        |
+| `GB_model.pkl`        | Trained Gradient Boosting model          |
+| `scaler.pkl`          | StandardScaler used in training          |
+| `feature_columns.pkl` | Order of features expected by model      |
+
+---
+
+## How to Run the App
+
+### 1. Clone this repo or download the files
 ```bash
-git clone https://github.com/yourusername/nyc-taxi-fare-predictor.git
-cd nyc-taxi-fare-predictor
+git clone https://github.com/your-username/tripfare-predictor.git
+cd tripfare-predictor
 ```
 
-### ✅ 2. Install Dependencies
-
-It's recommended to use a virtual environment:
-
+### 2. Install requirements
 ```bash
-conda create -n taxi-fare python=3.10
-conda activate taxi-fare
 pip install -r requirements.txt
 ```
 
-Required packages:
-```txt
-streamlit
-pandas
-numpy
-scikit-learn==1.5.1
-```
-
-### ✅ 3. Place Artifacts
-
-Ensure the following trained model files are in the project root:
-
-- `model.pkl`
-- `expected_columns.pkl`
-
-> If not present, you can regenerate using the training notebook or script provided.
-
----
-
-## 🚀 Running the App
-
+Or install manually:
 ```bash
-streamlit run Tripfare_app.py
+pip install streamlit scikit-learn numpy pandas xgboost
 ```
 
-Visit `http://localhost:8501` in your browser.
+### 3. Run the app
+```bash
+streamlit run TripFareApp.py
+```
+
+Then open `http://localhost:8501` in your browser.
 
 ---
 
-## 📂 File Structure
+## How Fare is Calculated
 
 ```
-├── cleaned_taxi_data.csv        # Preprocessed dataset
-├── TripFareNB.ipynb             # Jupyter notebook used to train the model
-├── Tripfare_app.py              # Streamlit app
-├── model.pkl                    # Trained LinearRegression model
-├── expected_columns.pkl         # List of model's expected input columns
-├── README.md                    # Project documentation
-```
-
----
-
-## 💡 Prediction Logic
-
-1. User inputs trip details via Streamlit.
-2. Inputs are processed and one-hot encoded.
-3. Scaled using `StandardScaler`.
-4. Model predicts **base fare**.
-5. Final fare is calculated as:
-
-```python
-final_fare = base_fare + extra + mta_tax + tip + tolls + improvement_surcharge
+Estimated Total Fare = 
+    predicted_fare_amount (from ML model) +
+    tip_amount (user input) +
+    tolls_amount (user input) +
+    mta_tax (fixed at $0.50) +
+    improvement_surcharge (fixed at $0.30)
 ```
 
 ---
 
-## 👨‍💻 Author
+## Model Training Overview
 
-**Yugeshwar V**  
+- Outlier Removal using IQR for distance, fare, duration
+- Feature Engineering: fare_per_km, fare_per_min, hour
+- Feature Scaling: StandardScaler
+- Model Evaluation: R², RMSE, MAE
+- Final Model: Tuned GradientBoostingRegressor
+
+---
+
+## Sample Prediction
+
+> **Input:** 5 km, 15 min, tip = $2, tolls = $0  
+> **Prediction:** Estimated Fare = `$13.45`
+
+---
+
+## Acknowledgements
+
+- NYC Taxi and Limousine Commission (TLC) for the dataset
+- Scikit-learn for modeling tools
+- Streamlit for interactive deployment
+
+---
+
+## Author
+
+Built by **Yugeshwar V**  
 
